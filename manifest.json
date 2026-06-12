@@ -2,7 +2,7 @@
   "name": "Инженерная шпаргалка",
   "short_name": "Шпаргалка",
   "description": "Шпаргалка инженера связи",
-  "start_url": "./engineering-cheatsheet.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1a6fba",
   "theme_color": "#1a6fba",
