@@ -37,12 +37,13 @@
   --sh: 0 2px 8px rgba(0,0,0,0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overscroll-behavior:none;}
+html{height:100%;-webkit-text-size-adjust:100%;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   background:var(--bg);color:var(--text);font-size:15px;
   -webkit-tap-highlight-color:transparent;
   overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ===== HEADER ===== */
@@ -50,8 +51,12 @@ body{
   background:var(--accent);color:#fff;
   padding:env(safe-area-inset-top,12px) 16px 10px;
   padding-top:calc(env(safe-area-inset-top,0px) + 12px);
-  position:sticky;top:0;z-index:100;
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:9999;
   box-shadow:0 2px 12px rgba(26,111,186,0.35);
+  -webkit-transform:translate3d(0,0,0);
+  transform:translate3d(0,0,0);
 }
 .header-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .app-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:7px;}
@@ -73,7 +78,8 @@ body{
 .tab-btn.active{background:#fff;border-color:#fff;color:var(--accent);font-weight:700;}
 
 /* ===== CARD LIST ===== */
-.card-list{padding:10px 14px 100px;display:flex;flex-direction:column;gap:10px;}
+.card-list{padding:10px 14px 100px;display:flex;flex-direction:column;gap:10px;position:relative;}
+#cardList{padding-top:10px;}
 
 .section-div{padding:4px 2px 2px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.6px;}
 .section-div::after{content:'';flex:1;height:1px;background:var(--border);}
@@ -562,6 +568,14 @@ async function init() {
   renderIconGrid();
   renderCards();
   registerSW();
+  fixHeaderOffset();
+  window.addEventListener('resize', fixHeaderOffset);
+}
+
+function fixHeaderOffset() {
+  const header = document.querySelector('.app-header');
+  const h = header.offsetHeight;
+  document.body.style.paddingTop = h + 'px';
 }
 
 function save() {
