@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Шпаргалка">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a6fba">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<meta name="apple-mobile-web-app-title" content="Шпаргалка">
+<title>Инженерная шпаргалка</title>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --surface: #fff;
+  --surface2: #f8f9fa;
+  --border: #e2e6ea;
+  --accent: #1a6fba;
+  --accent-dark: #145899;
+  --accent-light: #e8f0fb;
+  --danger: #d63031;
+  --danger-light: #ffeaea;
+  --star: #f39c12;
+  --text: #1a1d23;
+  --muted: #6b7280;
+  --green: #00b894;
+  --r: 12px;
+  --rs: 8px;
+  --sh: 0 2px 8px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overscroll-behavior:none;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--text);font-size:15px;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+
+/* ===== HEADER ===== */
+.app-header{
+  background:var(--accent);color:#fff;
+  padding:env(safe-area-inset-top,12px) 16px 10px;
+  padding-top:calc(env(safe-area-inset-top,0px) + 12px);
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(26,111,186,0.35);
+}
+.header-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.app-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.app-title .ico{font-size:20px;}
+.header-right{display:flex;align-items:center;gap:6px;}
+.badge{font-size:11px;opacity:.85;background:rgba(255,255,255,0.18);padding:3px 8px;border-radius:20px;white-space:nowrap;}
+.btn-menu{background:rgba(255,255,255,0.15);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+.search-wrap{position:relative;margin-bottom:10px;}
+.search-input{width:100%;padding:10px 36px 10px 14px;border:none;border-radius:var(--rs);font-size:15px;background:rgba(255,255,255,0.92);color:var(--text);outline:none;}
+.search-input::placeholder{color:#9aa8b8;}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;color:#9aa8b8;display:none;padding:2px;}
+
+.toolbar-row{display:flex;align-items:center;gap:8px;}
+.btn-add{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);color:#fff;border:1.5px solid rgba(255,255,255,0.35);border-radius:var(--rs);padding:8px 14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.btn-add:active{background:rgba(255,255,255,0.28);}
+.filter-tabs{display:flex;gap:5px;flex:1;justify-content:flex-end;}
+.tab-btn{background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:20px;padding:7px 14px;font-size:14px;cursor:pointer;color:rgba(255,255,255,0.78);white-space:nowrap;font-weight:500;transition:all .18s;}
+.tab-btn.active{background:#fff;border-color:#fff;color:var(--accent);font-weight:700;}
+
+/* ===== CARD LIST ===== */
+.card-list{padding:10px 14px 100px;display:flex;flex-direction:column;gap:10px;}
+
+.section-div{padding:4px 2px 2px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.6px;}
+.section-div::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:1.5px solid var(--border);overflow:hidden;}
+.card.fav{border-color:var(--star);background:#fffdf5;}
+.card.usr{border-left:3px solid var(--green);}
+
+.card-head{display:flex;align-items:center;gap:10px;padding:12px 14px 8px;}
+.card-ico{width:40px;height:40px;border-radius:10px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.card.fav .card-ico{background:#fff8e7;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-meta{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.btn-star{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;flex-shrink:0;}
+
+.card-actions{display:flex;gap:6px;padding:0 12px 12px;}
+.btn-instr{flex:1;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-instr:active{background:var(--accent-dark);}
+.btn-icon{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 13px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.btn-icon.edit{color:var(--accent);}
+.btn-icon.del{color:var(--danger);}
+.btn-icon:active{opacity:.7;}
+
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty .em{font-size:48px;margin-bottom:12px;}
+.empty h3{font-size:16px;margin-bottom:6px;color:var(--text);}
+
+/* ===== MODALS ===== */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.52);z-index:200;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;animation:slideUp .22s ease;}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0;}
+.modal-head{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
+.modal-title{font-size:17px;font-weight:700;}
+.modal-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.head-btns{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.btn-close{background:var(--surface2);border:none;border-radius:50%;width:32px;height:32px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.btn-edit-head{background:var(--accent-light);color:var(--accent);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ===== INSTRUCTION ===== */
+.instr-body{padding:14px 16px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
+.step{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.step-n{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.step-t{font-size:15px;line-height:1.55;word-break:break-word;flex:1;}
+.copy-val{display:inline-flex;align-items:center;gap:4px;background:#f0f4ff;border:1px solid #c5d3f0;border-radius:5px;padding:1px 7px;font-family:'SF Mono','Courier New',monospace;font-size:13px;cursor:pointer;color:var(--accent);}
+.copy-val:active{background:#d0deff;}
+
+/* ===== IMAGE GALLERY ===== */
+.img-gallery{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 12px;}
+.img-thumb{width:80px;height:70px;border-radius:8px;object-fit:cover;border:1.5px solid var(--border);cursor:pointer;}
+.img-thumb:active{opacity:.8;}
+
+/* ===== ADD/EDIT FORM ===== */
+.form-body{padding:14px 16px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;}
+.fg label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.fi{width:100%;border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-size:15px;color:var(--text);background:var(--surface);outline:none;font-family:inherit;transition:border-color .18s;}
+.fi:focus{border-color:var(--accent);}
+.fi.ta{min-height:52px;resize:vertical;line-height:1.5;}
+
+.step-row{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px;}
+.step-n-edit{width:28px;height:36px;background:var(--accent-light);color:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.btn-rm-step{background:none;border:none;cursor:pointer;font-size:18px;color:var(--danger);padding:6px 4px;flex-shrink:0;}
+.btn-add-step{background:var(--accent-light);color:var(--accent);border:1.5px dashed var(--accent);border-radius:var(--rs);padding:9px;font-size:14px;font-weight:600;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;}
+
+/* photo upload in form */
+.photo-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.photo-item{position:relative;width:72px;height:64px;}
+.photo-item img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1.5px solid var(--border);}
+.btn-rm-photo{position:absolute;top:-6px;right:-6px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.btn-upload{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1.5px dashed var(--border);border-radius:var(--rs);padding:9px 14px;font-size:14px;color:var(--muted);cursor:pointer;width:100%;}
+input[type=file]{display:none;}
+
+.icon-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.ico-opt{width:40px;height:40px;border-radius:10px;border:2px solid var(--border);background:var(--surface2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;}
+.ico-opt.sel{border-color:var(--accent);background:var(--accent-light);}
+
+.modal-footer{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+.btn-save{flex:1;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:13px;font-size:15px;font-weight:700;cursor:pointer;}
+.btn-save:active{background:var(--accent-dark);}
+.btn-cancel{background:var(--surface2);color:var(--muted);border:1.5px solid var(--border);border-radius:var(--rs);padding:13px 18px;font-size:15px;font-weight:600;cursor:pointer;}
+
+/* ===== CONFIRM ===== */
+.confirm-body{padding:20px 18px;text-align:center;}
+.confirm-body .em{font-size:40px;margin-bottom:10px;}
+.confirm-body h3{font-size:17px;font-weight:700;margin-bottom:6px;}
+.confirm-body p{font-size:14px;color:var(--muted);line-height:1.5;}
+.btn-danger{flex:1;background:var(--danger);color:#fff;border:none;border-radius:var(--rs);padding:13px;font-size:15px;font-weight:700;cursor:pointer;}
+
+/* ===== MENU PANEL ===== */
+.menu-panel{border-radius:var(--r) var(--r) 0 0;width:100%;max-width:640px;max-height:60vh;display:flex;flex-direction:column;animation:slideUp .22s ease;}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px 20px;font-size:15px;cursor:pointer;border-bottom:1px solid var(--border);background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;color:var(--text);}
+.menu-item:last-child{border-bottom:none;}
+.menu-item .mi-ico{font-size:22px;width:28px;text-align:center;}
+.menu-item .mi-label{font-weight:600;}
+.menu-item .mi-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.menu-item.danger .mi-label{color:var(--danger);}
+
+/* ===== LIGHTBOX ===== */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:300;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:96vw;max-height:90vh;border-radius:8px;object-fit:contain;}
+.lb-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(80px);background:#1a1d23;color:#fff;padding:10px 20px;border-radius:24px;font-size:14px;font-weight:500;z-index:400;transition:transform .25s,opacity .25s;opacity:0;pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+@media(min-width:640px){
+  .overlay{align-items:center;}
+  .modal,.menu-panel{border-radius:var(--r);max-height:88vh;margin:0 16px;}
+  .modal-handle{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-row1">
+    <div class="app-title"><span class="ico">📡</span>Инженерная шпаргалка</div>
+    <div class="header-right">
+      <span class="badge" id="headerStats">0 устройств</span>
+      <button class="btn-menu" onclick="openMenu()" title="Меню">⋯</button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" type="search" placeholder="Поиск оборудования…" autocomplete="off" spellcheck="false">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
+  <div class="toolbar-row">
+    <button class="btn-add" onclick="openAddModal()">➕ Добавить</button>
+    <div class="filter-tabs">
+      <button class="tab-btn active" data-filter="all" onclick="setFilter('all')">Все</button>
+      <button class="tab-btn" data-filter="favorites" onclick="setFilter('favorites')">⭐</button>
+      <button class="tab-btn" data-filter="user" onclick="setFilter('user')">Мои</button>
+    </div>
+  </div>
+</header>
+
+<div id="cardList" class="card-list"></div>
+
+<!-- INSTRUCTION MODAL -->
+<div class="overlay" id="instrOverlay" onclick="bgClose(event,'instrOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div style="flex:1;min-width:0;">
+        <div class="modal-title" id="instrTitle">—</div>
+        <div class="modal-sub" id="instrSub"></div>
+      </div>
+      <div class="head-btns">
+        <button class="btn-edit-head" id="instrEditBtn" onclick="editFromInstr()" title="Редактировать">✏️</button>
+        <button class="btn-close" onclick="closeModal('instrOverlay')">✕</button>
+      </div>
+    </div>
+    <div id="instrGallery" class="img-gallery" style="display:none"></div>
+    <div class="instr-body" id="instrBody"></div>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="addOverlay" onclick="bgClose(event,'addOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div><div class="modal-title" id="addTitle">Новое оборудование</div><div class="modal-sub">Сохраняется на устройстве</div></div>
+      <button class="btn-close" onclick="closeModal('addOverlay')">✕</button>
+    </div>
+    <div class="form-body">
+      <div class="fg"><label>Название</label><input class="fi" id="fName" placeholder="Например: Cisco 2960" maxlength="60"></div>
+      <div class="fg"><label>Описание (под названием)</label><input class="fi" id="fMeta" placeholder="Например: Голосовой шлюз VoIP" maxlength="80"></div>
+      <div class="fg"><label>Иконка</label><div class="icon-grid" id="iconGrid"></div></div>
+      <div class="fg">
+        <label>Фотографии</label>
+        <div class="photo-list" id="photoList"></div>
+        <label class="btn-upload"><span>📷 Добавить фото</span><input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(this)"></label>
+      </div>
+      <div class="fg">
+        <label>Инструкция</label>
+        <div id="stepsList"></div>
+        <button class="btn-add-step" onclick="addStep('')">➕ Добавить шаг</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('addOverlay')">Отмена</button>
+      <button class="btn-save" onclick="saveEquipment()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="overlay" id="confirmOverlay" onclick="bgClose(event,'confirmOverlay')">
+  <div class="modal" style="max-height:320px;">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Подтверждение</div><button class="btn-close" onclick="closeModal('confirmOverlay')">✕</button></div>
+    <div class="confirm-body"><div class="em">🗑️</div><h3>Удалить устройство?</h3><p id="confirmText"></p></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('confirmOverlay')">Отмена</button>
+      <button class="btn-danger" id="confirmBtn">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<!-- MENU PANEL -->
+<div class="overlay" id="menuOverlay" onclick="bgClose(event,'menuOverlay')">
+  <div class="menu-panel" style="background:var(--surface);">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Меню</div><button class="btn-close" onclick="closeModal('menuOverlay')">✕</button></div>
+    <button class="menu-item" onclick="exportData()">
+      <span class="mi-ico">📤</span>
+      <div><div class="mi-label">Экспорт данных</div><div class="mi-sub">Скачать резервную копию JSON</div></div>
+    </button>
+    <label class="menu-item" style="cursor:pointer;">
+      <span class="mi-ico">📥</span>
+      <div><div class="mi-label">Импорт данных</div><div class="mi-sub">Восстановить из файла JSON</div></div>
+      <input type="file" accept=".json" style="display:none" onchange="importData(this)">
+    </label>
+    <button class="menu-item" onclick="showInstallTip()">
+      <span class="mi-ico">📱</span>
+      <div><div class="mi-label">Установить на телефон</div><div class="mi-sub">Добавить на главный экран</div></div>
+    </button>
+    <button class="menu-item danger" onclick="confirmReset()">
+      <span class="mi-ico">⚠️</span>
+      <div><div class="mi-label">Сбросить пользовательские данные</div><div class="mi-sub">Удалит все добавленные записи</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- INSTALL TIP MODAL -->
+<div class="overlay" id="installOverlay" onclick="bgClose(event,'installOverlay')">
+  <div class="modal" style="max-height:420px;">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">📱 Установка на телефон</div><button class="btn-close" onclick="closeModal('installOverlay')">✕</button></div>
+    <div class="instr-body" id="installBody" style="padding:16px 18px;"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close">✕</button>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  BUILTIN DATA
+// ============================================================
+const BUILTIN = [
+  {
+    id: "addpack", name: "Addpack AP1100F", icon: "📞", meta: "Голосовой шлюз VoIP",
+    instruction: [
+      "Подключить Ethernet-кабель к порту WAN (порт 0) устройства.",
+      "Подать питание 220В, дождаться загрузки (~60 сек). Светодиод PWR — зелёный.",
+      "Открыть браузер и перейти по адресу <span class='copy-val' onclick='copyText(\"192.168.1.1\")'>192.168.1.1 📋</span>",
+      "Войти: логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>",
+      "Перейти: Network → WAN → задать IP по схеме объекта.",
+      "Перейти: VoIP → SIP → прописать адрес SIP-сервера, логин и пароль абонента.",
+      "Нажать Save, затем Apply. Устройство применит настройки без перезагрузки.",
+      "Проверить регистрацию: Status → VoIP Lines. Статус должен быть Registered."
+    ]
+  },
+  {
+    id: "zsss_evo_x7", name: "ЗССС Evolution X7", icon: "🛰️", meta: "Спутниковый модем",
+    instruction: [
+      "Подключить кабели IF от ODU к разъёму LNB/BUC на задней панели модема.",
+      "Подключить Ethernet к порту Ethernet 1 (управление: <span class='copy-val' onclick='copyText(\"192.168.0.1\")'>192.168.0.1 📋</span>).",
+      "Включить питание. Дождаться статуса на дисплее: IDLE или ACQUISITION.",
+      "Зайти в WEB: логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"password\")'>password 📋</span>",
+      "Перейти: Configuration → Network → задать IP, маску, шлюз.",
+      "Перейти: Configuration → Modem → ввести параметры несущей (частота, скорость, поляризация) по НТД.",
+      "Выполнить юстировку антенны по уровню сигнала в разделе Monitor → RF Level.",
+      "После захвата несущей статус изменится на TRAFFIC. Проверить BER < 1e-7."
+    ]
+  },
+  {
+    id: "portserver", name: "Portserver", icon: "🔌", meta: "Сервер последовательных портов",
+    instruction: [
+      "Подключить Ethernet-кабель и последовательные устройства к COM-портам.",
+      "По умолчанию IP: <span class='copy-val' onclick='copyText(\"192.168.1.1\")'>192.168.1.1 📋</span> — открыть в браузере.",
+      "Войти: логин <span class='copy-val' onclick='copyText(\"root\")'>root 📋</span>, пароль <span class='copy-val' onclick='copyText(\"dbps\")'>dbps 📋</span>",
+      "Network → IP Settings — задать рабочий IP объекта.",
+      "Ports → Port X → выбрать режим: TCP Server или UDP.",
+      "Задать параметры COM-порта: скорость (9600/19200/115200), биты данных, чётность.",
+      "Сохранить и применить. Проверить telnet до порта: <span class='copy-val' onclick='copyText(\"telnet 192.168.1.1 2001\")'>telnet 192.168.1.1 2001 📋</span>",
+      "Устройство готово к работе."
+    ]
+  },
+  {
+    id: "nortel2526t", name: "Коммутатор Nortel 2526T", icon: "🔗", meta: "Управляемый коммутатор L2",
+    instruction: [
+      "Подключить консольный кабель RS-232 к порту CONSOLE. Параметры: <span class='copy-val' onclick='copyText(\"9600 8N1\")'>9600 8N1 📋</span>",
+      "Подать питание. Дождаться приглашения CLI (~30 сек).",
+      "Войти: логин <span class='copy-val' onclick='copyText(\"ro\")'>ro 📋</span>, пароль пустой. Для привилегий: enable, пароль <span class='copy-val' onclick='copyText(\"config\")'>config 📋</span>",
+      "Задать IP: <code>ip address x.x.x.x/xx</code> в разделе управляющего VLAN.",
+      "Настроить VLAN: <code>vlan create X name NAME</code>, добавить порты: <code>vlan members add X 1-4</code>",
+      "Сохранить: <code>save config</code>",
+      "Для сброса к заводским: удерживать кнопку RESET >5 сек при включённом питании."
+    ]
+  },
+  {
+    id: "infinet", name: "ШРД Infinet", icon: "📶", meta: "Широкополосное радиооборудование",
+    instruction: [
+      "Подключить PoE-инжектор к порту ETH0 устройства.",
+      "Заводской IP: <span class='copy-val' onclick='copyText(\"192.168.0.1\")'>192.168.0.1 📋</span> — открыть WEB-интерфейс.",
+      "Логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"password\")'>password 📋</span>",
+      "Configuration → Radio → задать частоту, ширину канала, мощность передатчика.",
+      "Режим работы: Master (базовая станция) или Slave (абонентский блок).",
+      "Для Slave: ввести MAC или имя Master в поле Remote Unit ID.",
+      "После установления связи в Monitor → Link отобразится уровень сигнала RSSI.",
+      "Оптимальный RSSI: от -65 до -75 dBm. Скорректировать ориентацию антенны при необходимости."
+    ]
+  },
+  {
+    id: "zelax", name: "Медиаконвертер Zelax", icon: "🔄", meta: "Конвертер Ethernet/оптика",
+    instruction: [
+      "Подключить оптический патчкорд (SC или LC) к соответствующему разъёму.",
+      "Подключить Ethernet-кабель к RJ-45 порту.",
+      "Подать питание 220В или 48В DC (в зависимости от модели).",
+      "Индикатор LINK должен загореться после установления соединения.",
+      "Если LINK не горит — проверить длину волны (1310нм/1550нм) и тип волокна (SM/MM).",
+      "Для управляемых моделей: IP по умолчанию <span class='copy-val' onclick='copyText(\"192.168.1.100\")'>192.168.1.100 📋</span>, логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>",
+      "Проверить OSNR и мощность оптического сигнала в разделе Statistics."
+    ]
+  },
+  {
+    id: "tetra_bs", name: "БС TETRA", icon: "📻", meta: "Базовая станция стандарта TETRA",
+    instruction: [
+      "Проверить напряжение питания: 48В DC ±10%.",
+      "Подключить антенный фидер к разъёму ANT через диплексер/циркулятор.",
+      "Подключить E1 или Ethernet к порту BSC/DXT.",
+      "Включить питание. Загрузка системы: ~3–5 минут.",
+      "Подключиться к командному интерфейсу: <span class='copy-val' onclick='copyText(\"telnet 192.168.0.1\")'>telnet 192.168.0.1 📋</span> или через OMSN.",
+      "Проверить статус сайта: команда <span class='copy-val' onclick='copyText(\"show site status\")'>show site status 📋</span>",
+      "Убедиться, что TX и RX частоты соответствуют частотному плану объекта.",
+      "Проверить уровень мощности RF и КСВ антенны (норма КСВ < 1.5)."
+    ]
+  },
+  {
+    id: "tau", name: "VoIP шлюз TAU", icon: "☎️", meta: "Аналоговый VoIP-шлюз",
+    instruction: [
+      "Подключить аналоговые телефоны или АТС к портам FXS/FXO.",
+      "Подключить Ethernet к LAN-порту.",
+      "Заводской IP: <span class='copy-val' onclick='copyText(\"192.168.1.1\")'>192.168.1.1 📋</span>",
+      "Войти: логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"rootpasswd\")'>rootpasswd 📋</span>",
+      "Перейти: Telephony → SIP → ввести адрес SIP-сервера и учётные данные линии.",
+      "Каждому FXS-порту назначить внутренний номер и пароль регистрации.",
+      "Применить настройки. Проверить: Status → SIP — строка Registration: OK.",
+      "Тестовый звонок: снять трубку, набрать номер другого порта."
+    ]
+  },
+  {
+    id: "pasolink", name: "Pasolink", icon: "📡", meta: "Радиорелейное оборудование NEC",
+    instruction: [
+      "Подключить LCT (ноутбук) к порту MNGT через кабель RJ-45.",
+      "Заводской IP блока IDU: <span class='copy-val' onclick='copyText(\"192.168.0.1\")'>192.168.0.1 📋</span>",
+      "Открыть PasoPro или WEB-интерфейс. Логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>",
+      "Configuration → Radio — задать рабочую частоту TX/RX согласно частотному назначению.",
+      "Задать мощность передатчика, ATPC (если используется).",
+      "Проверить уровень принимаемого сигнала RSL: норма от -30 до -70 dBm.",
+      "Alarm → Active Alarms — убедиться в отсутствии критических аварий.",
+      "Зафиксировать RSL, TSL, BER в журнале объекта."
+    ]
+  },
+  {
+    id: "zsss_justir", name: "Юстировка ЗССС", icon: "🎯", meta: "Процедура наводки спутниковой антенны",
+    instruction: [
+      "Включить модем и ODU, дождаться инициализации (статус ACQUISITION).",
+      "Открыть в браузере Monitor → RF Level для наблюдения за уровнем сигнала.",
+      "Грубое наведение: ориентировать антенну по азимуту и углу места согласно расчётам для данного объекта.",
+      "Вращать антенну медленно по азимуту — найти максимум уровня сигнала.",
+      "Затем скорректировать угол места (элевация) — добиться максимума.",
+      "Точная юстировка: поворачивать по 0.1° и фиксировать показания AGC/Es/N0.",
+      "Целевой Es/N0 согласно НТД (обычно ≥ 8–10 дБ над порогом).",
+      "Затянуть крепёж антенны, повторно проверить уровни после затяжки.",
+      "Занести в акт: азимут, элевация, Es/N0, RSL, дата, ФИО инженера."
+    ]
+  },
+  {
+    id: "elesi", name: "Контроллер ЭЛЕСИ", icon: "⚙️", meta: "ПЛК / контроллер телемеханики",
+    instruction: [
+      "Подключить ПК через RS-232 или USB-RS485 к консольному порту.",
+      "Открыть ПО «ЭЛЕСИ-КФ» или аналогичное, выбрать COM-порт, скорость <span class='copy-val' onclick='copyText(\"19200\")'>19200 📋</span> бод.",
+      "Войти в режим конфигурации. Проверить прошивку и конфигурационный файл.",
+      "Задать адрес Modbus: Configuration → Node Address.",
+      "Настроить входы/выходы в соответствии со схемой объекта.",
+      "Загрузить конфигурацию в контроллер. Дождаться подтверждения записи.",
+      "Перезапустить контроллер. Проверить циклическое опросное сообщение через терминал.",
+      "Убедиться, что данные телеметрии отображаются корректно на диспетчерском пункте."
+    ]
+  },
+  {
+    id: "dmr5000s", name: "DMR 5000S", icon: "📟", meta: "Базовая станция стандарта DMR",
+    instruction: [
+      "Проверить питание: 48В DC или 220В AC (с внешним БП).",
+      "Подключить антенный кабель к разъёму RF ANT (тип N или 7/16 DIN).",
+      "Подключить Ethernet к Management-порту.",
+      "IP по умолчанию: <span class='copy-val' onclick='copyText(\"192.168.10.1\")'>192.168.10.1 📋</span>",
+      "Открыть WEB, войти: логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>",
+      "Radio → Channel Plan — задать TX/RX частоты, цветовой код (Color Code), тип слота.",
+      "Настроить ID сайта и регионального контроллера.",
+      "Проверить мощность TX и КСВ антенны (норма < 1.5).",
+      "Monitor → Calls — убедиться в корректной регистрации абонентов."
+    ]
+  }
+];
+
+// ============================================================
+//  IndexedDB  (фото хранятся отдельно — до нескольких ГБ)
+// ============================================================
+let db = null;
+const DB_NAME = 'eng_cheatsheet', DB_VER = 1, STORE = 'photos';
+
+function openDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(STORE);
+    req.onsuccess = e => { db = e.target.result; res(db); };
+    req.onerror   = e => rej(e);
+  });
+}
+function dbPut(key, blob) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).put(blob, key);
+    tx.oncomplete = res; tx.onerror = rej;
+  });
+}
+function dbGet(key) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).get(key);
+    req.onsuccess = e => res(e.target.result);
+    req.onerror   = rej;
+  });
+}
+function dbDel(key) {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).delete(key);
+    tx.oncomplete = res; tx.onerror = rej;
+  });
+}
+function dbGetAll() {
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const store = tx.objectStore(STORE);
+    const keys = [], vals = [];
+    store.openCursor().onsuccess = e => {
+      const cur = e.target.result;
+      if (cur) { keys.push(cur.key); vals.push(cur.value); cur.continue(); }
+      else res({ keys, vals });
+    };
+    tx.onerror = rej;
+  });
+}
+
+// ============================================================
+//  STATE  (localStorage для текста, IndexedDB для фото)
+// ============================================================
+let favorites    = JSON.parse(localStorage.getItem('eng_fav')  || '[]');
+let userEquip    = JSON.parse(localStorage.getItem('eng_equip') || '[]');
+let searchQ      = '';
+let activeFilter = 'all';
+let editingId    = null;
+let selIcon      = '📦';
+let stepCtr      = 0;
+let curInstrId   = null;
+let pendingPhotos = [];   // {key, url} — фото текущей редактируемой записи
+let toastTmr;
+
+const ICONS = ['📦','📡','📞','☎️','🔌','🔗','📶','🛰️','🔄','📻','⚙️','💻','🖥️','📟','🎯','🔧','🔑','📋','💡','🌐'];
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  await openDB();
+  renderIconGrid();
+  renderCards();
+  registerSW();
+}
+
+function save() {
+  localStorage.setItem('eng_fav',   JSON.stringify(favorites));
+  localStorage.setItem('eng_equip', JSON.stringify(userEquip));
+}
+
+// ============================================================
+//  DATA
+// ============================================================
+function getAll() {
+  const uids = userEquip.map(u => u.id);
+  return [...BUILTIN.filter(b => !uids.includes(b.id)), ...userEquip];
+}
+
+// ============================================================
+//  RENDER CARDS
+// ============================================================
+function renderCards() {
+  const list = document.getElementById('cardList');
+  let all = getAll();
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    all = all.filter(e => e.name.toLowerCase().includes(q) || (e.meta||'').toLowerCase().includes(q));
+  }
+  if (activeFilter === 'favorites') all = all.filter(e => favorites.includes(e.id));
+  if (activeFilter === 'user')      all = all.filter(e => userEquip.find(u => u.id === e.id));
+  all.sort((a,b) => (favorites.includes(a.id)?0:1)-(favorites.includes(b.id)?0:1));
+
+  document.getElementById('headerStats').textContent = getAll().length + ' устройств';
+
+  if (!all.length) {
+    list.innerHTML = '<div class="empty"><div class="em">'+(searchQ?'🔍':'📭')+'</div><h3>'+(searchQ?'Ничего не найдено':'Список пуст')+'</h3><p>'+(searchQ?'Попробуйте другой запрос':'Нажмите «Добавить»')+'</p></div>';
+    return;
+  }
+
+  const favs = all.filter(e =>  favorites.includes(e.id));
+  const rest = all.filter(e => !favorites.includes(e.id));
+  let html = '';
+
+  if (activeFilter === 'favorites') {
+    favs.forEach(e => html += cardHTML(e));
+  } else {
+    if (favs.length) {
+      html += '<div class="section-div">⭐ Избранное</div>';
+      favs.forEach(e => html += cardHTML(e));
+      if (rest.length) html += '<div class="section-div">Все устройства</div>';
+    }
+    rest.forEach(e => html += cardHTML(e));
+  }
+  list.innerHTML = html;
+}
+
+function cardHTML(eq) {
+  const isFav = favorites.includes(eq.id);
+  const isUsr = !!userEquip.find(u => u.id === eq.id);
+  return '<div class="card'+(isFav?' fav':'')+(isUsr?' usr':'')+'" id="c-'+eq.id+'">' +
+    '<div class="card-head">'+
+      '<div class="card-ico">'+(eq.icon||'📦')+'</div>'+
+      '<div class="card-info">'+
+        '<div class="card-name">'+eq.name+'</div>'+
+        (eq.meta?'<div class="card-meta">'+eq.meta+'</div>':'')+
+      '</div>'+
+      '<button class="btn-star" onclick="toggleFav(\''+eq.id+'\')">'+  (isFav?'⭐':'☆')+'</button>'+
+    '</div>'+
+    '<div class="card-actions">'+
+      '<button class="btn-instr" onclick="openInstr(\''+eq.id+'\')">📖 Инструкция</button>'+
+      '<button class="btn-icon edit" onclick="openEdit(\''+eq.id+'\')" title="Редактировать">✏️</button>'+
+      '<button class="btn-icon del"  onclick="confirmDel(\''+eq.id+'\')" title="Удалить">🗑️</button>'+
+    '</div>'+
+  '</div>';
+}
+
+// ============================================================
+//  FAVORITES
+// ============================================================
+function toggleFav(id) {
+  if (favorites.includes(id)) { favorites = favorites.filter(f=>f!==id); showToast('Убрано из избранного'); }
+  else { favorites.push(id); showToast('⭐ В избранное'); }
+  save(); renderCards();
+}
+
+// ============================================================
+//  INSTRUCTION MODAL
+// ============================================================
+async function openInstr(id) {
+  const eq = getAll().find(e=>e.id===id);
+  if (!eq) return;
+  curInstrId = id;
+  document.getElementById('instrTitle').textContent = eq.name;
+  document.getElementById('instrSub').textContent   = eq.meta || '';
+  document.getElementById('instrEditBtn').style.display = 'flex';
+
+  // Steps
+  const body = document.getElementById('instrBody');
+  body.innerHTML = eq.instruction && eq.instruction.length
+    ? eq.instruction.map((s,i)=>'<div class="step"><div class="step-n">'+(i+1)+'</div><div class="step-t">'+s+'</div></div>').join('')
+    : '<div style="color:var(--muted);padding:20px 0;text-align:center">Инструкция не добавлена</div>';
+
+  // Photos from IndexedDB
+  const gallery = document.getElementById('instrGallery');
+  const photoKeys = (eq.photoKeys || []);
+  if (photoKeys.length) {
+    gallery.style.display = 'flex';
+    gallery.innerHTML = '';
+    for (const key of photoKeys) {
+      const blob = await dbGet(key);
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const img = document.createElement('img');
+        img.className = 'img-thumb';
+        img.src = url;
+        img.onclick = () => openLightbox(url);
+        gallery.appendChild(img);
+      }
+    }
+  } else {
+    gallery.style.display = 'none';
+    gallery.innerHTML = '';
+  }
+
+  openModal('instrOverlay');
+}
+
+function editFromInstr() {
+  closeModal('instrOverlay');
+  setTimeout(() => openEdit(curInstrId), 220);
+}
+
+// ============================================================
+//  DELETE
+// ============================================================
+function confirmDel(id) {
+  const eq = getAll().find(e=>e.id===id);
+  document.getElementById('confirmText').textContent = 'Удалить «'+(eq?eq.name:id)+'»? Это нельзя отменить.';
+  document.getElementById('confirmBtn').onclick = () => doDelete(id);
+  openModal('confirmOverlay');
+}
+
+async function doDelete(id) {
+  const eq = userEquip.find(e=>e.id===id);
+  if (eq && eq.photoKeys) { for (const k of eq.photoKeys) await dbDel(k); }
+  userEquip = userEquip.filter(e=>e.id!==id);
+  favorites = favorites.filter(f=>f!==id);
+  save(); closeModal('confirmOverlay'); renderCards(); showToast('🗑️ Удалено');
+}
+
+function confirmReset() {
+  closeModal('menuOverlay');
+  document.getElementById('confirmText').textContent = 'Удалить ВСЕ пользовательские записи и фото? Встроенные останутся.';
+  document.getElementById('confirmBtn').onclick = doReset;
+  openModal('confirmOverlay');
+}
+
+async function doReset() {
+  for (const eq of userEquip) {
+    if (eq.photoKeys) for (const k of eq.photoKeys) await dbDel(k);
+  }
+  userEquip = []; favorites = []; save();
+  closeModal('confirmOverlay'); renderCards(); showToast('♻️ Данные сброшены');
+}
+
+// ============================================================
+//  ADD / EDIT MODAL
+// ============================================================
+function openAddModal() {
+  editingId = null; selIcon = '📦'; stepCtr = 0; pendingPhotos = [];
+  document.getElementById('addTitle').textContent  = 'Новое оборудование';
+  document.getElementById('fName').value           = '';
+  document.getElementById('fMeta').value           = '';
+  document.getElementById('stepsList').innerHTML   = '';
+  document.getElementById('photoList').innerHTML   = '';
+  renderIconGrid();
+  addStep('');
+  openModal('addOverlay');
+  setTimeout(() => document.getElementById('fName').focus(), 300);
+}
+
+async function openEdit(id) {
+  let eq = userEquip.find(e=>e.id===id) || BUILTIN.find(e=>e.id===id);
+  if (!eq) return;
+  editingId = id; selIcon = eq.icon||'📦'; stepCtr = 0; pendingPhotos = [];
+
+  document.getElementById('addTitle').textContent = 'Редактировать';
+  document.getElementById('fName').value          = eq.name;
+  document.getElementById('fMeta').value          = eq.meta||'';
+  document.getElementById('stepsList').innerHTML  = '';
+  document.getElementById('photoList').innerHTML  = '';
+  renderIconGrid();
+
+  (eq.instruction||[]).forEach(s => addStep(s.replace(/<[^>]*>/g,'')));
+
+  // Load existing photos
+  for (const key of (eq.photoKeys||[])) {
+    const blob = await dbGet(key);
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      pendingPhotos.push({key, blob, url, existing: true});
+      renderPhotoList();
+    }
+  }
+
+  openModal('addOverlay');
+  setTimeout(() => document.getElementById('fName').focus(), 300);
+}
+
+// ---- ICON GRID ----
+function renderIconGrid() {
+  document.getElementById('iconGrid').innerHTML = ICONS.map(ic =>
+    '<div class="ico-opt'+(ic===selIcon?' sel':'')+'" onclick="selectIcon(\''+ic+'\')">'+ic+'</div>'
+  ).join('');
+}
+function selectIcon(ic) { selIcon = ic; renderIconGrid(); }
+
+// ---- STEPS ----
+function addStep(val) {
+  stepCtr++;
+  const n = stepCtr;
+  const div = document.createElement('div');
+  div.className = 'step-row'; div.id = 'sr-'+n;
+  div.innerHTML =
+    '<div class="step-n-edit">'+n+'</div>'+
+    '<textarea class="fi ta" id="sf-'+n+'" rows="2" placeholder="Шаг инструкции…">'+escHtml(val||'')+'</textarea>'+
+    '<button class="btn-rm-step" onclick="removeStep('+n+')">✕</button>';
+  document.getElementById('stepsList').appendChild(div);
+}
+function removeStep(n) {
+  const el = document.getElementById('sr-'+n); if(el) el.remove(); renumberSteps();
+}
+function renumberSteps() {
+  let i=1;
+  document.querySelectorAll('.step-row').forEach(r=>{const n=r.querySelector('.step-n-edit');if(n)n.textContent=i++;});
+}
+
+// ---- PHOTOS ----
+async function handlePhotos(input) {
+  const files = Array.from(input.files);
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    // Resize to max 1200px to save space
+    const blob = await resizeImage(file, 1200);
+    const key  = 'photo_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const url  = URL.createObjectURL(blob);
+    pendingPhotos.push({key, blob, url, existing: false});
+  }
+  input.value = '';
+  renderPhotoList();
+}
+
+function resizeImage(file, maxPx) {
+  return new Promise(res => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.width, h = img.height;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else       { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      const cv = document.createElement('canvas');
+      cv.width=w; cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      cv.toBlob(b => res(b), 'image/jpeg', 0.82);
+    };
+    img.src = url;
+  });
+}
+
+function renderPhotoList() {
+  const list = document.getElementById('photoList');
+  list.innerHTML = '';
+  pendingPhotos.forEach((p,i) => {
+    const div = document.createElement('div'); div.className='photo-item';
+    div.innerHTML='<img src="'+p.url+'" alt=""><button class="btn-rm-photo" onclick="removePhoto('+i+')">✕</button>';
+    list.appendChild(div);
+  });
+}
+function removePhoto(i) { pendingPhotos.splice(i,1); renderPhotoList(); }
+
+// ---- SAVE ----
+async function saveEquipment() {
+  const name  = document.getElementById('fName').value.trim();
+  const meta  = document.getElementById('fMeta').value.trim();
+  if (!name) { showToast('⚠️ Введите название'); return; }
+
+  const steps = [];
+  document.querySelectorAll('[id^="sf-"]').forEach(el => { const v=el.value.trim(); if(v) steps.push(v); });
+  if (!steps.length) { showToast('⚠️ Добавьте хотя бы один шаг'); return; }
+
+  // Save new photos to IndexedDB
+  const photoKeys = [];
+  for (const p of pendingPhotos) {
+    await dbPut(p.key, p.blob);
+    photoKeys.push(p.key);
+  }
+
+  if (editingId) {
+    const idx = userEquip.findIndex(e=>e.id===editingId);
+    // Delete old photos that were removed
+    const orig = userEquip[idx] || BUILTIN.find(e=>e.id===editingId);
+    if (orig && orig.photoKeys) {
+      for (const k of orig.photoKeys) {
+        if (!photoKeys.includes(k)) await dbDel(k);
+      }
+    }
+    if (idx >= 0) {
+      userEquip[idx] = {...userEquip[idx], name, meta, icon:selIcon, instruction:steps, photoKeys};
+    } else {
+      const ob = BUILTIN.find(e=>e.id===editingId);
+      userEquip.push({id:editingId, name, meta:meta||(ob?ob.meta:''), icon:selIcon, instruction:steps, photoKeys});
+    }
+    showToast('✅ Сохранено');
+  } else {
+    const id = 'u_'+Date.now();
+    userEquip.push({id, name, meta:meta||'Пользовательская запись', icon:selIcon, instruction:steps, photoKeys});
+    showToast('✅ Добавлено');
+  }
+
+  save(); closeModal('addOverlay'); renderCards();
+}
+
+// ============================================================
+//  EXPORT / IMPORT
+// ============================================================
+async function exportData() {
+  closeModal('menuOverlay');
+  // Collect all photos as base64 for portability
+  const photoMap = {};
+  const {keys, vals} = await dbGetAll();
+  for (let i=0; i<keys.length; i++) {
+    const b64 = await blobToBase64(vals[i]);
+    photoMap[keys[i]] = b64;
+  }
+  const data = {
+    version: 2,
+    exported: new Date().toISOString(),
+    favorites,
+    userEquip,
+    photos: photoMap
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'шпаргалка_' + new Date().toLocaleDateString('ru').replace(/\./g,'-') + '.json';
+  a.click();
+  showToast('📤 Экспорт выполнен');
+}
+
+async function importData(input) {
+  const file = input.files[0]; if(!file) return;
+  closeModal('menuOverlay');
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data.userEquip) throw new Error('Неверный формат');
+
+    // Restore photos to IndexedDB
+    if (data.photos) {
+      for (const [key, b64] of Object.entries(data.photos)) {
+        const blob = await base64ToBlob(b64);
+        await dbPut(key, blob);
+      }
+    }
+    userEquip = data.userEquip || [];
+    favorites = data.favorites || [];
+    save(); renderCards();
+    showToast('📥 Импорт выполнен: '+userEquip.length+' записей');
+  } catch(e) {
+    showToast('⚠️ Ошибка импорта: '+e.message);
+  }
+  input.value = '';
+}
+
+function blobToBase64(blob) {
+  return new Promise(res => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.readAsDataURL(blob);
+  });
+}
+function base64ToBlob(b64) {
+  return new Promise(res => {
+    const [header, data] = b64.split(',');
+    const mime = header.match(/:(.*?);/)[1];
+    const bin  = atob(data);
+    const arr  = new Uint8Array(bin.length);
+    for (let i=0; i<bin.length; i++) arr[i] = bin.charCodeAt(i);
+    res(new Blob([arr], {type: mime}));
+  });
+}
+
+// ============================================================
+//  INSTALL TIP
+// ============================================================
+function showInstallTip() {
+  closeModal('menuOverlay');
+  const ua = navigator.userAgent;
+  let html = '';
+  if (/iPhone|iPad/.test(ua)) {
+    html = '<div class="step"><div class="step-n">1</div><div class="step-t">Откройте этот файл в Safari (не Chrome)</div></div>'+
+           '<div class="step"><div class="step-n">2</div><div class="step-t">Нажмите кнопку «Поделиться» (квадрат со стрелкой вверх) в нижней панели Safari</div></div>'+
+           '<div class="step"><div class="step-n">3</div><div class="step-t">Выберите «На экран «Домой»» и нажмите «Добавить»</div></div>'+
+           '<div class="step"><div class="step-n">4</div><div class="step-t">Шпаргалка появится на главном экране как приложение</div></div>';
+  } else if (/Android/.test(ua)) {
+    html = '<div class="step"><div class="step-n">1</div><div class="step-t">Откройте файл в Chrome</div></div>'+
+           '<div class="step"><div class="step-n">2</div><div class="step-t">Нажмите ⋮ (три точки) в правом верхнем углу</div></div>'+
+           '<div class="step"><div class="step-n">3</div><div class="step-t">Выберите «Добавить на главный экран»</div></div>'+
+           '<div class="step"><div class="step-n">4</div><div class="step-t">Нажмите «Добавить» — значок появится на рабочем столе</div></div>';
+  } else {
+    html = '<div class="step"><div class="step-n">1</div><div class="step-t">На Android: Chrome → ⋮ → «Добавить на главный экран»</div></div>'+
+           '<div class="step"><div class="step-n">2</div><div class="step-t">На iPhone: Safari → Поделиться → «На экран Домой»</div></div>'+
+           '<div class="step"><div class="step-n">3</div><div class="step-t">После добавления данные хранятся надёжнее</div></div>';
+  }
+  document.getElementById('installBody').innerHTML = html;
+  openModal('installOverlay');
+}
+
+// ============================================================
+//  MENU
+// ============================================================
+function openMenu() { openModal('menuOverlay'); }
+
+// ============================================================
+//  SERVICE WORKER (офлайн)
+// ============================================================
+function registerSW() {
+  if ('serviceWorker' in navigator) {
+    // Inline SW through blob — работает без сервера
+    const swCode = `
+const CACHE='eng-v1';
+const FILES=['./'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{
+  const cl=resp.clone();
+  caches.open(CACHE).then(c=>c.put(e.request,cl));
+  return resp;
+}).catch(()=>caches.match('./')))));
+    `;
+    const blob = new Blob([swCode], {type:'application/javascript'});
+    const url  = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url).catch(()=>{});
+  }
+}
+
+// ============================================================
+//  SEARCH & FILTER
+// ============================================================
+document.getElementById('searchInput').addEventListener('input', function() {
+  searchQ = this.value.trim();
+  document.getElementById('searchClear').style.display = searchQ ? 'flex' : 'none';
+  renderCards();
+});
+function clearSearch() {
+  document.getElementById('searchInput').value = ''; searchQ = '';
+  document.getElementById('searchClear').style.display = 'none';
+  renderCards();
+}
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.filter===f));
+  renderCards();
+}
+
+// ============================================================
+//  MODAL HELPERS
+// ============================================================
+function openModal(id)  { document.getElementById(id).classList.add('open');    document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+function bgClose(e,id)  { if(e.target.id===id) closeModal(id); }
+
+// ============================================================
+//  LIGHTBOX
+// ============================================================
+function openLightbox(src) { document.getElementById('lbImg').src=src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox()   { document.getElementById('lightbox').classList.remove('open'); }
+
+// ============================================================
+//  COPY
+// ============================================================
+function copyText(t) {
+  navigator.clipboard.writeText(t).then(()=>showToast('📋 '+t)).catch(()=>showToast('Нет доступа к буферу'));
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') ['instrOverlay','addOverlay','confirmOverlay','menuOverlay','installOverlay'].forEach(id=>{
+    if(document.getElementById(id).classList.contains('open')) closeModal(id);
+  });
+});
+
+init();
+</script>
+</body>
+</html>
