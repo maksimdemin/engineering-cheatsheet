@@ -157,7 +157,7 @@ body.edit-mode .edit-mode-dot{background:#f39c12;}
 .step{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
 .step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
 .step-n{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
-.step-t{font-size:15px;line-height:1.55;word-break:break-word;flex:1;}
+.step-t{font-size:15px;line-height:1.55;word-break:break-word;flex:1;white-space:pre-line;}
 .copy-val{display:inline-flex;align-items:center;gap:4px;background:#f0f4ff;border:1px solid #c5d3f0;border-radius:5px;padding:1px 7px;font-family:'SF Mono','Courier New',monospace;font-size:13px;cursor:pointer;color:var(--accent);}
 .copy-val:active{background:#d0deff;}
 
@@ -375,8 +375,8 @@ const BUILTIN = [
   {
     id: "addpack", name: "Addpack AP1100F", icon: "📞", meta: "Голосовой шлюз VoIP",
     instruction: [
-      "Если известен IP AP1100F, то подключаемся к LAN0 через Telnet по IP патчкордом ETH. Иначе подключаемся консольным кабелем в порт Console (9600/8/нет/1/нет)).",
-      "Логин: root\nПароль: router\n10.233.127.98/29\n10.233.127.97 шлюз.",
+      "Подключить Ethernet-кабель к порту WAN (порт 0) устройства.",
+      "Подать питание 220В, дождаться загрузки (~60 сек). Светодиод PWR — зелёный.",
       "Открыть браузер и перейти по адресу <span class='copy-val' onclick='copyText(\"192.168.1.1\")'>192.168.1.1 📋</span>",
       "Войти: логин <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>, пароль <span class='copy-val' onclick='copyText(\"admin\")'>admin 📋</span>",
       "Перейти: Network → WAN → задать IP по схеме объекта.",
